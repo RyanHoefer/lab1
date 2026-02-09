@@ -14,29 +14,34 @@ void main(){
 
     oi_t *sensor_data = oi_alloc();
     oi_init(sensor_data);
-    int i;
+    const int TURNING_ANGLE = 63.5;
 
-    double distanceToGo = 2000.0;
-    bool leftBumperPressed = false;
-    bool rightBumperPressed = false;
+    double distanceTraveled = 0.0;
 
-    while (distanceToGo > 0.0) {
+    while (distanceTraveled <= 2000.0) {
+        distanceTraveled += move_forward_until_pressed(sensor_data, (2000 - distanceTraveled));
         oi_update(sensor_data);
-        while (sensor_data -> bumpLeft == 0 && sensor_data -> bumpRight == 0) {
-            oi_update(sensor_data);
-            move_forward(sensor_data, 10);
-            distanceToGo -= sensor_data -> distance;
+        if (sensor_data -> bumpLeft != 0) {
+            move_backwards(sensor_data, 150);
+            turn_right(sensor_data, TURNING_ANGLE);
+            move_forward(sensor_data, 250);
+            turn_left(sensor_data, TURNING_ANGLE);
+            move_forward(sensor_data, 150);
         }
-        if (sensor_data -> bumpLeft > 0 || sensor_data -> bumpRight > 0) {
-            if (sensor_data -> bumpLeft > 0) {
-                move_backwards(sensor_data, 150);
-            }
+        else if (sensor_data -> bumpRight != 0) {
+            move_backwards(sensor_data, 150);
+            turn_left(sensor_data, TURNING_ANGLE);
+            move_forward(sensor_data, 250);
+            turn_right(sensor_data, TURNING_ANGLE);
+            move_forward(sensor_data, 150);
         }
+        oi_update(sensor_data);
     }
+
+
     /*
-    for (i = 0; i < 4; i++) {
-        move_forward(sensor_data,500.0);
-        turn_right(sensor_data, 63.5);
+    while (sensor_data -> bumpLeft != 0 || sensor_data -> bumpRight != 0) {
+        move_forward(sensor_data, 2000);
     }
     */
 
@@ -47,27 +52,34 @@ void main(){
 
 double move_forward(oi_t *sensor_data, double distance_mm){
     double totalDistanceTraveled = 0.0;
-    oi_setWheels(250,250);
+    oi_setWheels(100,100);
     while(totalDistanceTraveled <= distance_mm){
         oi_update(sensor_data);
         totalDistanceTraveled += sensor_data -> distance;
     }
     oi_setWheels(0,0);
-
-
     return totalDistanceTraveled;
 }
 
 double move_backwards(oi_t *sensor_data, double distance_mm){
     double totalDistanceTraveled = 0.0;
-    oi_setWheels(-250,-250);
+    oi_setWheels(-200,-200);
     while(totalDistanceTraveled <= distance_mm){
         oi_update(sensor_data);
         totalDistanceTraveled += abs(sensor_data -> distance);
     }
     oi_setWheels(0,0);
+    return totalDistanceTraveled;
+}
 
-
+double move_forward_until_pressed(oi_t *sensor_data, double distance_mm){
+    double totalDistanceTraveled = 0.0;
+    oi_setWheels(150,150);
+    while((totalDistanceTraveled <= distance_mm) && (sensor_data -> bumpLeft == 0 && sensor_data -> bumpRight == 0)){
+        oi_update(sensor_data);
+        totalDistanceTraveled += sensor_data -> distance;
+    }
+    oi_setWheels(0,0);
     return totalDistanceTraveled;
 }
 
@@ -98,9 +110,4 @@ oi_setWheels(100,-100); //right wheel in reverse and left wheel forward
     }
     oi_setWheels(0,0);
 }
-
-void bumpTrigger() {
-    move_backwards(sensor_data, 150.0);
-}
-
 
