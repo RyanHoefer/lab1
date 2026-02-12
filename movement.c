@@ -9,7 +9,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-
+/*
 void main(){
 
     oi_t *sensor_data = oi_alloc();
@@ -43,12 +43,12 @@ void main(){
     while (sensor_data -> bumpLeft != 0 || sensor_data -> bumpRight != 0) {
         move_forward(sensor_data, 2000);
     }
-    */
+
 
     oi_free(sensor_data);
 
 }
-
+*/
 
 double move_forward(oi_t *sensor_data, double distance_mm){
     double totalDistanceTraveled = 0.0;

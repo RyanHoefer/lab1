@@ -8,12 +8,17 @@ SHELL = cmd.exe
 CMD_SRCS += \
 ../tm4c123gh6pm.cmd 
 
+LIB_SRCS += \
+../libcybotScan.lib \
+../libcybotUART.lib 
+
 C_SRCS += \
 ../Timer.c \
 ../helloworld.c \
 ../lcd.c \
 ../movement.c \
 ../open_interface.c \
+../scanning.c \
 ../tm4c123gh6pm_startup_ccs.c 
 
 C_DEPS += \
@@ -22,6 +27,7 @@ C_DEPS += \
 ./lcd.d \
 ./movement.d \
 ./open_interface.d \
+./scanning.d \
 ./tm4c123gh6pm_startup_ccs.d 
 
 OBJS += \
@@ -30,6 +36,7 @@ OBJS += \
 ./lcd.obj \
 ./movement.obj \
 ./open_interface.obj \
+./scanning.obj \
 ./tm4c123gh6pm_startup_ccs.obj 
 
 OBJS__QUOTED += \
@@ -38,6 +45,7 @@ OBJS__QUOTED += \
 "lcd.obj" \
 "movement.obj" \
 "open_interface.obj" \
+"scanning.obj" \
 "tm4c123gh6pm_startup_ccs.obj" 
 
 C_DEPS__QUOTED += \
@@ -46,6 +54,7 @@ C_DEPS__QUOTED += \
 "lcd.d" \
 "movement.d" \
 "open_interface.d" \
+"scanning.d" \
 "tm4c123gh6pm_startup_ccs.d" 
 
 C_SRCS__QUOTED += \
@@ -54,6 +63,7 @@ C_SRCS__QUOTED += \
 "../lcd.c" \
 "../movement.c" \
 "../open_interface.c" \
+"../scanning.c" \
 "../tm4c123gh6pm_startup_ccs.c" 
 
 
