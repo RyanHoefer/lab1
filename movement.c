@@ -39,7 +39,7 @@ void main(){
     }
 
 
-    /*
+
     while (sensor_data -> bumpLeft != 0 || sensor_data -> bumpRight != 0) {
         move_forward(sensor_data, 2000);
     }

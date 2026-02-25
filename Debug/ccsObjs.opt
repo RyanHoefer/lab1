@@ -1,5 +1,7 @@
 "./Timer.obj"
+"./button.obj"
 "./helloworld.obj"
+"./lab4_template.obj"
 "./lcd.obj"
 "./movement.obj"
 "./open_interface.obj"

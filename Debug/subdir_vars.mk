@@ -14,7 +14,9 @@ LIB_SRCS += \
 
 C_SRCS += \
 ../Timer.c \
+../button.c \
 ../helloworld.c \
+../lab4_template.c \
 ../lcd.c \
 ../movement.c \
 ../open_interface.c \
@@ -23,7 +25,9 @@ C_SRCS += \
 
 C_DEPS += \
 ./Timer.d \
+./button.d \
 ./helloworld.d \
+./lab4_template.d \
 ./lcd.d \
 ./movement.d \
 ./open_interface.d \
@@ -32,7 +36,9 @@ C_DEPS += \
 
 OBJS += \
 ./Timer.obj \
+./button.obj \
 ./helloworld.obj \
+./lab4_template.obj \
 ./lcd.obj \
 ./movement.obj \
 ./open_interface.obj \
@@ -41,7 +47,9 @@ OBJS += \
 
 OBJS__QUOTED += \
 "Timer.obj" \
+"button.obj" \
 "helloworld.obj" \
+"lab4_template.obj" \
 "lcd.obj" \
 "movement.obj" \
 "open_interface.obj" \
@@ -50,7 +58,9 @@ OBJS__QUOTED += \
 
 C_DEPS__QUOTED += \
 "Timer.d" \
+"button.d" \
 "helloworld.d" \
+"lab4_template.d" \
 "lcd.d" \
 "movement.d" \
 "open_interface.d" \
@@ -59,7 +69,9 @@ C_DEPS__QUOTED += \
 
 C_SRCS__QUOTED += \
 "../Timer.c" \
+"../button.c" \
 "../helloworld.c" \
+"../lab4_template.c" \
 "../lcd.c" \
 "../movement.c" \
 "../open_interface.c" \
