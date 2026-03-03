@@ -17,27 +17,29 @@ void uart_init(void);
 void uart_sendChar(char data);
 char uart_receive(void);
 
+
+/*
 int main(void){
 
-    uint8_t num = 0;
-    char s_data;
-    char chr[26];
+
+
+
 
     uart_init();
 
-    for (s_data = 'a'; s_data <= 'z'; s_data = s_data +1){
-        uart_sendChar(s_data);
-        chr[num] = uart_receive();
-        num++;
-    }
+
+        uart_sendChar('a');
+        char okie = uart_receive();
+
+
     while(1);
 }
 
-
+*/
 
 
 void uart_init(void){
-	//TODO
+
   //enable clock to GPIO port B
   SYSCTL_RCGCGPIO_R |= 0x02;
 
@@ -49,13 +51,13 @@ void uart_init(void){
   while ((SYSCTL_PRUART_R & 0x02) == 0) {};
 
   //enable alternate functions on port B pins
-  GPIO_PORTB_AFSEL_R |= 0x03;
+  GPIO_PORTB_AFSEL_R |= 0x0FF;
 
   //enable digital functionality on port B pins
-  GPIO_PORTB_DEN_R |= 0x03;
+  GPIO_PORTB_DEN_R |= 0xFF;
 
   //enable UART1 Rx and Tx on port B pins
-  GPIO_PORTB_PCTL_R |= 0x000000FF;
+  GPIO_PORTB_PCTL_R |= 0x00000011;
 
   //GPIO_PORTF_DEN_R |= 0x0F;
   //GPIO_PORTF_DIR_R |= 0x0F;
@@ -88,7 +90,7 @@ void uart_init(void){
   //Good to be explicit in your code
   //Be careful to not clear RX and TX enable bits
   //(either preserve if already set or set them)
-  UART1_CTL_R |= 0x0301;
+  UART1_CTL_R |= 0x1;
 
 }
 
@@ -99,16 +101,8 @@ void uart_sendChar(char data){
 }
 
 char uart_receive(void){
-	uint32_t ret;
-	char rdata;
 	while ((UART1_FR_R & 0x10) != 0);
-	ret = UART1_DR_R;
-	if (ret & 0xF00) {
-	    GPIO_PORTB_DATA_R = 0xF;
-	}else {
-	    rdata = (char)(UART1_DR_R & 0xFF);
-	}
-	return rdata;
+	return UART1_DR_R & 0xFF;
 
 
 }
@@ -124,5 +118,7 @@ void sendAStringToPuTTY(char string[]){
 }
 */
 void uart_sendStr(const char *data){
-	//TODO for reference see lcd_puts from lcd.c file
+	while (*data){//while char isnt null byte
+	    uart_sendChar(*data++);
+	}
 }

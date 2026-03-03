@@ -18,17 +18,15 @@
                          // PuTTy: Baud=115200, 8 data bits, No Flow Control, No Parity, COM1
 
 #include "cyBot_Scan.h"  // Scan using CyBot servo and sensors
+#include "uart.h"
 
 
-#warning "Possible unimplemented functions"
 #define REPLACEME 0
 
 
-/*
+
 int main(void) {
-	button_init();
-	timer_init(); // Must be called before lcd_init(), which uses timer functions
-	lcd_init();
+
 
   // initialize the cyBot UART1 before trying to use it
 
@@ -52,14 +50,45 @@ int main(void) {
 		// Remember servo calibration function and variables from Lab 3
 
 	// YOUR CODE HERE
-
+	button_init();
+    timer_init(); // Must be called before lcd_init(), which uses timer functions
+    lcd_init();
+    uart_init();
+    int numChars = 0;
+    char message[100] = "";
+    char recievedChar;
 	while(1)
 	{
 
-      // YOUR CODE HERE
+	    recievedChar = uart_receive();
+
+	    if (numChars >= 20 || recievedChar == '\r'){
+	        lcd_printf("");
+
+	        lcd_printf("%s", message);
+	        memset(message, 0, sizeof(message));
+
+	        lcd_printf(" ");
+
+	        numChars = 0;
+	        if(recievedChar == '\r'){
+	            uart_sendChar(recievedChar);
+	            uart_sendChar('\n');
+	        }
+
+
+	    }else {
+	        message[numChars] = recievedChar;
+	        lcd_printf("%s\n%d ", message, ++numChars);
+	        uart_sendChar(recievedChar);
+
+
+
+	    }
+
 
 
 	}
 
 }
-*/
+
