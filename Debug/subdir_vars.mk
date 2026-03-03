@@ -17,65 +17,77 @@ C_SRCS += \
 ../button.c \
 ../helloworld.c \
 ../lab4_template.c \
+../lab5_template.c \
 ../lcd.c \
 ../movement.c \
 ../open_interface.c \
 ../scanning.c \
-../tm4c123gh6pm_startup_ccs.c 
+../tm4c123gh6pm_startup_ccs.c \
+../uart.c 
 
 C_DEPS += \
 ./Timer.d \
 ./button.d \
 ./helloworld.d \
 ./lab4_template.d \
+./lab5_template.d \
 ./lcd.d \
 ./movement.d \
 ./open_interface.d \
 ./scanning.d \
-./tm4c123gh6pm_startup_ccs.d 
+./tm4c123gh6pm_startup_ccs.d \
+./uart.d 
 
 OBJS += \
 ./Timer.obj \
 ./button.obj \
 ./helloworld.obj \
 ./lab4_template.obj \
+./lab5_template.obj \
 ./lcd.obj \
 ./movement.obj \
 ./open_interface.obj \
 ./scanning.obj \
-./tm4c123gh6pm_startup_ccs.obj 
+./tm4c123gh6pm_startup_ccs.obj \
+./uart.obj 
 
 OBJS__QUOTED += \
 "Timer.obj" \
 "button.obj" \
 "helloworld.obj" \
 "lab4_template.obj" \
+"lab5_template.obj" \
 "lcd.obj" \
 "movement.obj" \
 "open_interface.obj" \
 "scanning.obj" \
-"tm4c123gh6pm_startup_ccs.obj" 
+"tm4c123gh6pm_startup_ccs.obj" \
+"uart.obj" 
 
 C_DEPS__QUOTED += \
 "Timer.d" \
 "button.d" \
 "helloworld.d" \
 "lab4_template.d" \
+"lab5_template.d" \
 "lcd.d" \
 "movement.d" \
 "open_interface.d" \
 "scanning.d" \
-"tm4c123gh6pm_startup_ccs.d" 
+"tm4c123gh6pm_startup_ccs.d" \
+"uart.d" 
 
 C_SRCS__QUOTED += \
 "../Timer.c" \
 "../button.c" \
 "../helloworld.c" \
 "../lab4_template.c" \
+"../lab5_template.c" \
 "../lcd.c" \
 "../movement.c" \
 "../open_interface.c" \
 "../scanning.c" \
-"../tm4c123gh6pm_startup_ccs.c" 
+"../tm4c123gh6pm_startup_ccs.c" \
+"../uart.c" 
 
 

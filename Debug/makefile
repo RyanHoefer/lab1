@@ -14,11 +14,13 @@ ORDERED_OBJS += \
 "./button.obj" \
 "./helloworld.obj" \
 "./lab4_template.obj" \
+"./lab5_template.obj" \
 "./lcd.obj" \
 "./movement.obj" \
 "./open_interface.obj" \
 "./scanning.obj" \
 "./tm4c123gh6pm_startup_ccs.obj" \
+"./uart.obj" \
 "../libcybotScan.lib" \
 "../libcybotUART.lib" \
 "../tm4c123gh6pm.cmd" \
@@ -152,8 +154,8 @@ Lab2.out: $(OBJS) $(CMD_SRCS) $(LIB_SRCS) $(GEN_CMDS)
 # Other Targets
 clean:
 	-$(RM) $(EXE_OUTPUTS__QUOTED)
-	-$(RM) "Timer.obj" "button.obj" "helloworld.obj" "lab4_template.obj" "lcd.obj" "movement.obj" "open_interface.obj" "scanning.obj" "tm4c123gh6pm_startup_ccs.obj" 
-	-$(RM) "Timer.d" "button.d" "helloworld.d" "lab4_template.d" "lcd.d" "movement.d" "open_interface.d" "scanning.d" "tm4c123gh6pm_startup_ccs.d" 
+	-$(RM) "Timer.obj" "button.obj" "helloworld.obj" "lab4_template.obj" "lab5_template.obj" "lcd.obj" "movement.obj" "open_interface.obj" "scanning.obj" "tm4c123gh6pm_startup_ccs.obj" "uart.obj" 
+	-$(RM) "Timer.d" "button.d" "helloworld.d" "lab4_template.d" "lab5_template.d" "lcd.d" "movement.d" "open_interface.d" "scanning.d" "tm4c123gh6pm_startup_ccs.d" "uart.d" 
 	-@echo 'Finished clean'
 	-@echo ' '
 

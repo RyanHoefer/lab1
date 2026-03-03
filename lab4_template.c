@@ -18,7 +18,7 @@
 
 #define REPLACEME 0
 
-
+/*
 
 int main(void) {
 	button_init();
@@ -56,7 +56,7 @@ int main(void) {
 	}
 
 }
-
+*/
 void sendAStringToPuTTY(char string[]){
     char message[100];
     sprintf(message, "%s", string);

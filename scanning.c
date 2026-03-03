@@ -18,12 +18,12 @@
 
 /*
 int main(void){
-/*
+
     timer_init(); // Initialize Timer, needed before any LCD screen functions can be called
                       // and enables time functions (e.g. timer_waitMillis)
 
     lcd_init();   // Initialize the LCD screen.  This also clears the screen.
-*/
+
    // cyBot_uart_init();
    // cyBOT_init_Scan(0b0111);
 
@@ -32,26 +32,25 @@ int main(void){
     //left_calibration_value = 1209250;
 
     //cyBOT_Scan_t* scanner = calloc(1, sizeof(cyBOT_Scan_t));
-/*
+
     int intermittentAngle = 2;
     int angleDesired = 90;
     double distArr[(angleDesired\intermittentAngle) + 1];
-*/
-/*
+
+
     timer_init();
     lcd_init();
     cyBOT_init_Scan(0b0111);
     cyBOT_SERVO_cal();
-*/
 
     //lcd_printf("%c",(char)cyBot_getByte());
-    /*
+    /
     char message[25];
     int totalAngle = 0;
     float scannerVal = scanner -> sound_dist;
     sprintf(message, "%d\t %f\n\r", totalAngle, scannerVal);
     sendAStringToPuTTY(message);
-    */
+
    // cyBOT_Scan(90, scanner);
 
     //sendACharToPuTTY((char)cyBot_getByte());
@@ -61,7 +60,7 @@ int main(void){
 
   // return 0;
 
-/*
+
 }
 */
 /*
