@@ -98,7 +98,7 @@ void pointToSmallestObject(double *distances, int intermittentAngle){
 
     }
 }
-
+*/
 
 void sendAStringToPuTTY(char string[]){
     char message[100];
@@ -176,4 +176,4 @@ void scanIntermitently(int intermitentAngle, int angleDesired, cyBOT_Scan_t* sca
     }
     cyBOT_Scan(objArr[smallestObj].angleToCenter, scanner);
 }
-*/
+

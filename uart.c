@@ -93,7 +93,7 @@ void uart_init(void){
   UART1_CTL_R |= 0x1;
 
 }
-
+/*
 void uart_sendChar(char data){
 	while((UART1_FR_R & 0x20) != 0);
 	    UART1_DR_R = data;
@@ -106,7 +106,15 @@ char uart_receive(void){
 
 
 }
-/*
+
+char uart_receive_nonblocking(void){
+    if ((UART1_FR_R & 0x10) == 0){
+        return UART1_DR_R & 0xFF;
+    } else{
+        return '\0';
+    }
+}
+
 void sendAStringToPuTTY(char string[]){
     char message[100];
     sprintf(message, "%s", string);
@@ -116,9 +124,10 @@ void sendAStringToPuTTY(char string[]){
     }
 
 }
-*/
+
 void uart_sendStr(const char *data){
 	while (*data){//while char isnt null byte
 	    uart_sendChar(*data++);
 	}
 }
+*/

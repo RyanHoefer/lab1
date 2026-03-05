@@ -57,6 +57,7 @@ int main(void) {
 
 }
 */
+/*
 void sendAStringToPuTTY(char string[]){
     char message[100];
     sprintf(message, "%s", string);
@@ -66,3 +67,4 @@ void sendAStringToPuTTY(char string[]){
     }
 
 }
+*/
