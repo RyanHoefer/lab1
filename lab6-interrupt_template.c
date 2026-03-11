@@ -21,7 +21,7 @@
 // They are declared with the extern qualifier in uart-interrupt.h, which makes the variables visible to this file.
 
 
-
+/*
 
 int main(void) {
 	timer_init(); // Must be called before lcd_init(), which uses timer functions
@@ -48,4 +48,4 @@ int main(void) {
 	}
 
 }
-
+*/

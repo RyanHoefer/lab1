@@ -11,10 +11,11 @@
 #include <stdbool.h>
 #include "Timer.h"
 #include "lcd.h"
-#include "cyBot_uart.h"
+
 #include <stdio.h>
 #include "scanning.h"
 #include "cyBot_Scan.h"
+#include "uart.h"
 
 
 int main(void){
@@ -24,38 +25,39 @@ int main(void){
 
     //lcd_init();   // Initialize the LCD screen.  This also clears the screen.
 
-    //cyBot_uart_init();
-  // cyBOT_init_Scan(0b0111);
-
     //For Calibration
     // right_calibration_value = 269500;
     //left_calibration_value = 1209250;
 
-    //cyBOT_Scan_t* scanner = calloc(1, sizeof(cyBOT_Scan_t));
+    cyBOT_Scan_t* scanner = calloc(1, sizeof(cyBOT_Scan_t));
 
-    int intermittentAngle = 2;
-    int angleDesired = 90;
-    double distArr[(angleDesired\intermittentAngle) + 1];
+    //int intermittentAngle = 2;
+    //int angleDesired = 90;
+    //double distArr[(angleDesired/intermittentAngle) + 1];
 
 
     timer_init();
     lcd_init();
+    uart_init();
+    //cyBot_uart_init();
     cyBOT_init_Scan(0b0111);
     //cyBOT_SERVO_cal();
 
     //lcd_printf("%c",(char)cyBot_getByte());
-    /
+
+    /*
     char message[25];
     int totalAngle = 0;
     float scannerVal = scanner -> sound_dist;
     sprintf(message, "%d\t %f\n\r", totalAngle, scannerVal);
     sendAStringToPuTTY(message);
+    */
 
-   // cyBOT_Scan(90, scanner);
+    //cyBOT_Scan(90, scanner);
 
     //sendACharToPuTTY((char)cyBot_getByte());
     //cyBOT_Scan(180, scanner);
-   //scanIntermitently(2, 180, scanner);
+    scanIntermitently(3, 180, scanner);
 
 
   // return 0;
@@ -80,7 +82,7 @@ void pointToSmallestObject(double *distances, int intermittentAngle){
 
     object objArr[10];
 
-    for(i = 1; (i < sizeOf(distances) \ sizeof(distances[0])); i ++){
+    for(i = 1; (i < sizeof(distances) / sizeof(distances[0])); i ++){
         previous = distances[i-1];
         current = distances[i];
         totalAngle += intermittentAngle;
@@ -93,7 +95,7 @@ void pointToSmallestObject(double *distances, int intermittentAngle){
         }
 
         if(tracking){
-            object.width += intermittentAngle;
+            objArr[i].width += intermittentAngle;
         }
 
     }
@@ -105,7 +107,7 @@ void sendAStringToPuTTY(char string[]){
     sprintf(message, "%s", string);
     int i;
     for(i = 0; i < strlen(message); i++){
-        cyBot_sendByte(message[i]);
+        uart_sendChar(message[i]);
     }
 
 }
@@ -114,7 +116,7 @@ void sendAStringToPuTTY(char string[]){
 
 
 void scanIntermitently(int intermitentAngle, int angleDesired, cyBOT_Scan_t* scanner){
-    sendAStringToPuTTY("Degrees  PING distance (cm)\n\r");
+    sendAStringToPuTTY("Degrees  PING distance (cm)  IR distance\n\r");
     char message[25];
     char message2[100];
     int totalAngle = 0;
@@ -123,11 +125,15 @@ void scanIntermitently(int intermitentAngle, int angleDesired, cyBOT_Scan_t* sca
     double previous = 0;
     int currentInf = 0;
     int previousInf = 0;
+    int doublePreviousInf = 0;
     int objNum = 0;
     int tracking = 0;
     int infVal = 0;
     int j;
-    //const double differenceEpsilon = ??;
+    int totalInfValue = 0;
+    float  averageInfValue;
+    const int differenceEpsilon = 600;
+    int firstIteration = 1;
 
 
     typedef struct{
@@ -139,41 +145,56 @@ void scanIntermitently(int intermitentAngle, int angleDesired, cyBOT_Scan_t* sca
         } object;
 
     object objArr[10];
-    int infAverageArr[3];
+
 
     while(totalAngle < angleDesired){
 
 
 
+        totalInfValue = 0; //reset the total value
         cyBOT_Scan(totalAngle, scanner);
         totalAngle += intermitentAngle;
         pingVal = scanner -> sound_dist;
         infVal = scanner-> IR_raw_val;
-        sprintf(message, "%d\t %f \n\r", totalAngle, pingVal);
-        sendAStringToPuTTY(message);
 
-        for(j = 0; i < 3; j++){
+        sendAStringToPuTTY(message);
+        totalInfValue += infVal;
+
+        for(j = 0; j < 2; j++){
             cyBOT_Scan(totalAngle, scanner);
             infVal = scanner-> IR_raw_val;
-            infAverageArr[i] = infVal;
+
+            totalInfValue += infVal;
         }
 
+        averageInfValue = totalInfValue / 3.0;
+
+        doublePreviousInf = previousInf;
+
         previous = current;
-        previousInf = currentInf
+        previousInf = currentInf;
 
         current = pingVal;
-        currentInf = infVal;
+        currentInf = averageInfValue;
+
+
+        if((firstIteration<3)){
+               firstIteration++;
+               continue;
+       }
+
+
 
 
             //                        epsilon here
-        if (((abs(previousInf - currentInf)) > 30.0) && tracking == 0 && /*(pingVal < 100.0)*/){
+        if (((abs( doublePreviousInf- currentInf)) > differenceEpsilon) && tracking == 0 /*&& (infVal < 100.0)*/){
             tracking = 1;
 
             objArr[objNum].startAngle = totalAngle;
             objArr[objNum].distance = pingVal;
 
         }
-        else if(((abs(previous - current)) > 30.0) && tracking == 1){
+        else if(((abs(doublePreviousInf - currentInf)) > differenceEpsilon) && tracking == 1){
             tracking = 0;
             objArr[objNum].endAngle = totalAngle;
             objArr[objNum].width = objArr[objNum].endAngle - objArr[objNum].startAngle;
@@ -184,6 +205,8 @@ void scanIntermitently(int intermitentAngle, int angleDesired, cyBOT_Scan_t* sca
             objNum++;
             sendAStringToPuTTY(message2);
         }
+
+        sprintf(message, "%d\t %f\t %f %d\t %d\t %d\n\r", totalAngle, pingVal, averageInfValue, doublePreviousInf, currentInf, tracking );
 
     }
     int i;

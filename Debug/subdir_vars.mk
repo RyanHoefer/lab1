@@ -8,6 +8,9 @@ SHELL = cmd.exe
 CMD_SRCS += \
 ../tm4c123gh6pm.cmd 
 
+LIB_SRCS += \
+../libcybotScan.lib 
+
 C_SRCS += \
 ../Timer.c \
 ../button.c \
