@@ -57,7 +57,7 @@ int main(void){
 
     //sendACharToPuTTY((char)cyBot_getByte());
     //cyBOT_Scan(180, scanner);
-    scanIntermitently(3, 180, scanner);
+    scanIntermitently(2, 180, scanner);
 
 
   // return 0;
@@ -114,26 +114,28 @@ void sendAStringToPuTTY(char string[]){
 
 
 
-
+//mostly good, a little error with edge detection but mostly good, figure oit bug with the width calulation and good to go
 void scanIntermitently(int intermitentAngle, int angleDesired, cyBOT_Scan_t* scanner){
     sendAStringToPuTTY("Degrees  PING distance (cm)  IR distance\n\r");
     char message[25];
-    char message2[100];
+    char message2[150];
     int totalAngle = 0;
     float pingVal;
     double current = 0;
     double previous = 0;
     int currentInf = 0;
     int previousInf = 0;
-    int doublePreviousInf = 0;
+    //int doublePreviousInf = 0;
     int objNum = 0;
     int tracking = 0;
     int infVal = 0;
     int j;
     int totalInfValue = 0;
     float  averageInfValue;
-    const int differenceEpsilon = 600;
+    const int differenceEpsilon = 150;
     int firstIteration = 1;
+    int trackedLastTime = 0;
+    int stoppedTrackingLastTime = 0;
 
 
     typedef struct{
@@ -142,6 +144,7 @@ void scanIntermitently(int intermitentAngle, int angleDesired, cyBOT_Scan_t* sca
             int startAngle;
             int endAngle;
             float distance;
+            float linearWidth;
         } object;
 
     object objArr[10];
@@ -169,7 +172,7 @@ void scanIntermitently(int intermitentAngle, int angleDesired, cyBOT_Scan_t* sca
 
         averageInfValue = totalInfValue / 3.0;
 
-        doublePreviousInf = previousInf;
+        //doublePreviousInf = previousInf;
 
         previous = current;
         previousInf = currentInf;
@@ -187,26 +190,33 @@ void scanIntermitently(int intermitentAngle, int angleDesired, cyBOT_Scan_t* sca
 
 
             //                        epsilon here
-        if (((abs( doublePreviousInf- currentInf)) > differenceEpsilon) && tracking == 0 /*&& (infVal < 100.0)*/){
+        if (((abs(previousInf- currentInf)) > differenceEpsilon) && tracking == 0 && stoppedTrackingLastTime == 0 /*&& (infVal < 100.0)*/){
             tracking = 1;
+            trackedLastTime = 1;
 
             objArr[objNum].startAngle = totalAngle;
             objArr[objNum].distance = pingVal;
 
-        }
-        else if(((abs(doublePreviousInf - currentInf)) > differenceEpsilon) && tracking == 1){
+        } else if(((abs(previousInf - currentInf)) > differenceEpsilon) && tracking == 1 && trackedLastTime == 0){
             tracking = 0;
+            stoppedTrackingLastTime = 1;
             objArr[objNum].endAngle = totalAngle;
             objArr[objNum].width = objArr[objNum].endAngle - objArr[objNum].startAngle;
+            objArr[objNum].linearWidth = tan(objArr[objNum].width) * objArr[objNum].distance;//issue here, not calculating the linear width correctly
             objArr[objNum].angleToCenter = (objArr[objNum].width / 2) + objArr[objNum].startAngle;
 
 
-            sprintf(message2, "Number: %d, Angle: %d, Distance %f, Width %d \n\r", objNum, objArr[objNum].angleToCenter, objArr[objNum].distance, objArr[objNum].width  );
+            //sprintf(message2, "Number: %d, Angle: %d, Distance %f,radial width %d, linear Width %f, tan function: %f\n\r", objNum, objArr[objNum].angleToCenter, objArr[objNum].distance,objArr[objNum].width, objArr[objNum].linearWidth, tan(objArr[objNum].width)  );
+            sprintf(message2," Distance %f,radial width %d, linear Width %f, tan function: %f\n\r", objArr[objNum].distance,objArr[objNum].width, objArr[objNum].linearWidth, tan(objArr[objNum].width)  );
             objNum++;
             sendAStringToPuTTY(message2);
+        }else{
+            stoppedTrackingLastTime = 0;
+
+            trackedLastTime = 0;
         }
 
-        sprintf(message, "%d\t %f\t %f %d\t %d\t %d\n\r", totalAngle, pingVal, averageInfValue, doublePreviousInf, currentInf, tracking );
+        sprintf(message, "%d\t %f\t %f %d\t %d\t %d\n\r", totalAngle, pingVal, averageInfValue, previousInf, currentInf, tracking );
 
     }
     int i;
@@ -220,10 +230,13 @@ void scanIntermitently(int intermitentAngle, int angleDesired, cyBOT_Scan_t* sca
             smallestObj = i;
         }
     }
+
     cyBOT_Scan(objArr[smallestObj].angleToCenter, scanner);
+
+
 }
 
-/* funciton below works for ping scanner
+ /*funciton below works for ping scanner
 void scanIntermitently(int intermitentAngle, int angleDesired, cyBOT_Scan_t* scanner){
     sendAStringToPuTTY("Degrees  PING distance (cm)\n\r");
     char message[25];
