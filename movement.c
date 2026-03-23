@@ -71,7 +71,7 @@ double move_backwards(oi_t *sensor_data, double distance_mm){
     oi_setWheels(0,0);
     return totalDistanceTraveled;
 }
-
+/*
 double move_forward_until_pressed(oi_t *sensor_data, double distance_mm){
     double totalDistanceTraveled = 0.0;
     oi_setWheels(150,150);
@@ -82,7 +82,7 @@ double move_forward_until_pressed(oi_t *sensor_data, double distance_mm){
     oi_setWheels(0,0);
     return totalDistanceTraveled;
 }
-
+*/
 void turn_right(oi_t *sensor_data, double degrees){
 
 double current_angle = 0.0;
