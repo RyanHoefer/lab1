@@ -57,7 +57,7 @@ int main(void){
 
     //sendACharToPuTTY((char)cyBot_getByte());
     //cyBOT_Scan(180, scanner);
-    scanIntermitently(4, 180, scanner);
+    scanIntermitently(2, 180, scanner);
 
 
   // return 0;
@@ -137,6 +137,7 @@ void scanIntermitently(int intermitentAngle, int angleDesired, cyBOT_Scan_t* sca
     int firstIteration = 1;
     int trackedLastTime = 0;
     int stoppedTrackingLastTime = 0;
+    const float TURNING_ANGLE = 0.75;
 
 
     typedef struct{
@@ -192,7 +193,7 @@ void scanIntermitently(int intermitentAngle, int angleDesired, cyBOT_Scan_t* sca
 
 
             //                        epsilon here
-        if (((abs(previousInf- currentInf)) > differenceEpsilon) && tracking == 0 && stoppedTrackingLastTime == 0 /*&& (infVal < 100.0)*/){
+        if (((abs(previousInf - currentInf)) > differenceEpsilon) && tracking == 0 && stoppedTrackingLastTime == 0 /*&& (infVal < 100.0)*/){
             tracking = 1;
             trackedLastTime = 1;
 
@@ -223,11 +224,11 @@ void scanIntermitently(int intermitentAngle, int angleDesired, cyBOT_Scan_t* sca
 
     }
     int i;
-    int smallestWidth = objArr[0].width;
-    int currentWidth = 0;
+    float smallestWidth = objArr[0].linearWidth;
+    float currentWidth = 0;
     int smallestObj = 0;
     for(i = 0; i < objNum; i++){
-        currentWidth = objArr[i].width;
+        currentWidth = objArr[i].linearWidth;
         if(currentWidth < smallestWidth) {
             smallestWidth = currentWidth;
             smallestObj = i;
@@ -236,22 +237,28 @@ void scanIntermitently(int intermitentAngle, int angleDesired, cyBOT_Scan_t* sca
 
     cyBOT_Scan(objArr[smallestObj].angleToCenter, scanner);
     char message3[25];
-    sprintf(message3, "moving: %f cm", (objArr[smallestObj].distance) * 10);
+    sprintf(message3, "moving: %f mm\n\r", (objArr[smallestObj].distance) * 10);
+    sendAStringToPuTTY(message3);
     //moveToSmallestWidth(objArr[smallestObj].angleToCenter, objArr[smallestObj].distance);
-    moveToSmallestWidth(objArr[smallestObj].angleToCenter, (objArr[smallestObj].distance) * 10);
+    moveToSmallestWidth((int)(objArr[smallestObj].angleToCenter * TURNING_ANGLE), (objArr[smallestObj].distance) * 10);
 
 
 }
 double move_forward_until_pressed(oi_t *sensor_data, double distance_mm){
     double totalDistanceTraveled = 0.0;
-    oi_setWheels(150,150);
+
     while((totalDistanceTraveled <= distance_mm) && (sensor_data -> bumpLeft == 0 && sensor_data -> bumpRight == 0)){
+        oi_setWheels(150,150);
         oi_update(sensor_data);
         totalDistanceTraveled += sensor_data -> distance;
         if(sensor_data -> bumpLeft != 0 || sensor_data -> bumpRight != 0){
             go_around_object(sensor_data);
+            totalDistanceTraveled += 35.0;
         }
     }
+    char message4[25];
+        sprintf(message4, "stopped moving %lf mm\n\r", distance_mm);
+        sendAStringToPuTTY(message4);
     oi_setWheels(0,0);
     return totalDistanceTraveled;
 }
@@ -276,6 +283,7 @@ void moveToSmallestWidth(int angle, float distance){
     while(totalDistanceTraveled < distance){
         totalDistanceTraveled += move_forward_until_pressed(sensor_data, distance);
     }
+    oi_free(sensor_data);
 
 
 }
@@ -283,26 +291,26 @@ void moveToSmallestWidth(int angle, float distance){
 
 
 void go_around_object(oi_t *sensor_data){
-    const int TURNING_ANGLE = 90;
+    const int TURNING_ANGLE = 65;
             oi_update(sensor_data);
             if (sensor_data -> bumpLeft != 0) {
-                move_backwards(sensor_data, 150);
+                move_backwards(sensor_data, 50);
                 turn_right(sensor_data, TURNING_ANGLE);
-                move_forward(sensor_data, 250);
-                turn_left(sensor_data, TURNING_ANGLE);
                 move_forward(sensor_data, 150);
                 turn_left(sensor_data, TURNING_ANGLE);
-                move_forward(sensor_data, 250);
+                move_forward(sensor_data, 450);
+                turn_left(sensor_data, TURNING_ANGLE);
+                move_forward(sensor_data, 150);
                 turn_right(sensor_data, TURNING_ANGLE);
             }
             else if (sensor_data -> bumpRight != 0) {
-                move_backwards(sensor_data, 150);
+                move_backwards(sensor_data, 50);
                 turn_left(sensor_data, TURNING_ANGLE);
-                move_forward(sensor_data, 250);
-                turn_right(sensor_data, TURNING_ANGLE);
                 move_forward(sensor_data, 150);
                 turn_right(sensor_data, TURNING_ANGLE);
-                move_forward(sensor_data, 250);
+                move_forward(sensor_data, 450);
+                turn_right(sensor_data, TURNING_ANGLE);
+                move_forward(sensor_data, 150);
                 turn_left(sensor_data, TURNING_ANGLE);
             }
             oi_update(sensor_data);
