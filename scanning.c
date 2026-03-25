@@ -133,8 +133,9 @@ void scanIntermitently(int intermitentAngle, int angleDesired, cyBOT_Scan_t* sca
     float averageInfValue;
     const int differenceEpsilon = 150;
     int trackedLastTime = 0;
+    int firstIteration = 1;
     int stoppedTrackingLastTime = 0;
-    const float TURNING_ANGLE = 0.75;
+    const float TURNING_ANGLE = 0.9;
 
     typedef struct {
         int angleToCenter;
@@ -154,6 +155,8 @@ void scanIntermitently(int intermitentAngle, int angleDesired, cyBOT_Scan_t* sca
     previousInf = scanner->IR_raw_val;
     previous = scanner->sound_dist;
     totalAngle += intermitentAngle;
+
+
 
     while(totalAngle < angleDesired){
 
@@ -176,6 +179,10 @@ void scanIntermitently(int intermitentAngle, int angleDesired, cyBOT_Scan_t* sca
         previousInf = currentInf;
         current = pingVal;
         currentInf = averageInfValue;
+        if((firstIteration<3)){
+                firstIteration++;
+              continue;
+        }
 
         if((abs(previousInf - currentInf) > differenceEpsilon) && tracking == 0 && stoppedTrackingLastTime == 0){
             tracking = 1;
@@ -240,7 +247,7 @@ void scanIntermitently(int intermitentAngle, int angleDesired, cyBOT_Scan_t* sca
     char message3[40];
     sprintf(message3, "moving: %f mm\n\r", (objArr[smallestObj].distance) * 10);
     sendAStringToPuTTY(message3);
-    moveToSmallestWidth((int)(objArr[smallestObj].angleToCenter * TURNING_ANGLE), (objArr[smallestObj].distance) * 8);
+    moveToSmallestWidth((int)(objArr[smallestObj].angleToCenter * TURNING_ANGLE), (objArr[smallestObj].distance) * 9);
 }
 
 double move_forward_until_pressed(oi_t *sensor_data, double distance_mm){
