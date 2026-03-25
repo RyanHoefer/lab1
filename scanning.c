@@ -107,8 +107,7 @@ void sendAStringToPuTTY(char string[]){
     sprintf(message, "%s", string);
     int i;
     for(i = 0; i < strlen(message); i++){
-        uart_sendChar(message[i]);
-    }
+        uart_sendChar(message[i]);    }
 
 }
 
