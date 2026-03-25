@@ -17,7 +17,7 @@
 #include "cyBot_Scan.h"
 #include "uart.h"
 
-
+/*
 int main(void){
 
     //timer_init(); // Initialize Timer, needed before any LCD screen functions can be called
@@ -45,13 +45,13 @@ int main(void){
 
     //lcd_printf("%c",(char)cyBot_getByte());
 
-    /*
+
     char message[25];
     int totalAngle = 0;
     float scannerVal = scanner -> sound_dist;
     sprintf(message, "%d\t %f\n\r", totalAngle, scannerVal);
     sendAStringToPuTTY(message);
-    */
+
 
     //cyBOT_Scan(90, scanner);
 
@@ -322,6 +322,7 @@ void go_around_object(oi_t *sensor_data){
             oi_update(sensor_data);
 
 }
+*/
 
  /*funciton below works for ping scanner
 void scanIntermitently(int intermitentAngle, int angleDesired, cyBOT_Scan_t* scanner){
