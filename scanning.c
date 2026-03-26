@@ -118,23 +118,28 @@ void scanIntermitently(int intermitentAngle, int angleDesired, cyBOT_Scan_t* sca
     sendAStringToPuTTY("Degrees  PING distance (cm)  IR distance\n\r");
     char message[50];
     char message2[150];
+    char message5[25];
     int totalAngle = 0;
     float pingVal;
     double current = 0;
     double previous = 0;
     int currentInf = 0;
     int previousInf = 0;
+    int doublePreviousInf = 0;
     int objNum = 0;
     int tracking = 0;
     int infVal = 0;
     int j;
     int totalInfValue = 0;
     float averageInfValue;
-    const int differenceEpsilon = 150;
+    const int differenceEpsilon = 300;
     int trackedLastTime = 0;
     int firstIteration = 1;
     int stoppedTrackingLastTime = 0;
-    const float TURNING_ANGLE = 0.9;
+    const float TURNING_ANGLE = 1;
+   // float average = 0.0;
+   // float previousAverage = 0.0;
+
 
     typedef struct {
         int angleToCenter;
@@ -171,6 +176,7 @@ void scanIntermitently(int intermitentAngle, int angleDesired, cyBOT_Scan_t* sca
             infVal = scanner->IR_raw_val;
             totalInfValue += infVal;
         }
+        doublePreviousInf = previousInf;
 
         averageInfValue = totalInfValue / 3.0;
 
@@ -178,17 +184,31 @@ void scanIntermitently(int intermitentAngle, int angleDesired, cyBOT_Scan_t* sca
         previousInf = currentInf;
         current = pingVal;
         currentInf = averageInfValue;
+
         if((firstIteration<3)){
                 firstIteration++;
+
               continue;
         }
+        //previousAverage = average;
 
-        if((abs(previousInf - currentInf) > differenceEpsilon) && tracking == 0 && stoppedTrackingLastTime == 0){
+       // average = doublePreviousInf + previousInf + currentInf;
+       // average /= 3;
+        //
+        //
+
+
+        if((abs(doublePreviousInf - currentInf) > differenceEpsilon) && tracking == 0 && stoppedTrackingLastTime == 0){
             tracking = 1;
             trackedLastTime = 1;
             objArr[objNum].startAngle = totalAngle;
 
-        } else if((abs(previousInf - currentInf) > differenceEpsilon) && tracking == 1 && trackedLastTime == 0){
+        } else if(trackedLastTime == 1 && tracking == 0){// skip if tracking last time and not tracking this time to throw out
+            trackedLastTime = 0;
+            tracking = 0;
+            sendAStringToPuTTY("continue \n\r");
+            continue;
+        } else if((abs(doublePreviousInf - currentInf) > differenceEpsilon) && tracking == 1 && trackedLastTime == 0){
             tracking = 0;
             stoppedTrackingLastTime = 1;
             objArr[objNum].endAngle = totalAngle;
@@ -226,7 +246,9 @@ void scanIntermitently(int intermitentAngle, int angleDesired, cyBOT_Scan_t* sca
             }
         }
 
-        sprintf(message, "%d\t %f\t %f\t %d\t %d\t %d\n\r", totalAngle, pingVal, averageInfValue, previousInf, currentInf, tracking);
+
+
+        sprintf(message, "%d\t %f\t %f\t %d\t %d\t %d %f\n\r", totalAngle, pingVal, averageInfValue, previousInf, currentInf, tracking);
         sendAStringToPuTTY(message);
     }
 
@@ -244,7 +266,7 @@ void scanIntermitently(int intermitentAngle, int angleDesired, cyBOT_Scan_t* sca
 
     cyBOT_Scan(objArr[smallestObj].angleToCenter, scanner);
     char message3[40];
-    sprintf(message3, "moving: %f mm\n\r", (objArr[smallestObj].distance) * 10);
+    sprintf(message3, "moving: %f mm turning: %f degrees, to angle to center: %d, actually turning, %d \n\r", (objArr[smallestObj].distance) * 10,objArr[smallestObj].angleToCenter * TURNING_ANGLE, objArr[smallestObj].angleToCenter, (int)(objArr[smallestObj].angleToCenter * TURNING_ANGLE) - 90);
     sendAStringToPuTTY(message3);
     moveToSmallestWidth((int)(objArr[smallestObj].angleToCenter * TURNING_ANGLE), (objArr[smallestObj].distance) * 9);
 }
