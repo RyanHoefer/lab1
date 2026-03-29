@@ -137,7 +137,7 @@ void scanIntermitently(int intermitentAngle, int angleDesired, cyBOT_Scan_t* sca
     int firstIteration = 1;
     int trackedLastTime = 0;
     int stoppedTrackingLastTime = 0;
-    const float TURNING_ANGLE = 1;
+
 
 
     typedef struct{
@@ -193,14 +193,14 @@ void scanIntermitently(int intermitentAngle, int angleDesired, cyBOT_Scan_t* sca
 
 
             //                        epsilon here
-        if (((abs(previousInf - currentInf)) > differenceEpsilon) && tracking == 0 && stoppedTrackingLastTime == 0 /*&& (infVal < 100.0)*/){
+        if (((abs(previousInf - currentInf)) > differenceEpsilon) && tracking == 0 && stoppedTrackingLastTime == 0 && (previous - currentInf) < 0 /*&& (infVal < 100.0)*/){
             tracking = 1;
             trackedLastTime = 1;
 
             objArr[objNum].startAngle = totalAngle;
             objArr[objNum].distance = pingVal;
 
-        } else if(((abs(previousInf - currentInf)) > differenceEpsilon) && tracking == 1 && trackedLastTime == 0){
+        } else if(((abs(previousInf - currentInf)) > differenceEpsilon) && tracking == 1 && trackedLastTime == 0 && (previousInf - currentInf) > 0){
             if(totalAngle - objArr[objNum].startAngle < 5 ){// skip less than 4 length objects
                 continue;
             }
@@ -209,7 +209,9 @@ void scanIntermitently(int intermitentAngle, int angleDesired, cyBOT_Scan_t* sca
             objArr[objNum].endAngle = totalAngle;
             objArr[objNum].width = objArr[objNum].endAngle - objArr[objNum].startAngle;
             //objArr[objNum].linearWidth = (tan(objArr[objNum].width)) * (objArr[objNum].distance);//issue here, not calculating the linear width correctly
-            objArr[objNum].linearWidth = (objArr[objNum].width*(M_PI/180)) * objArr[objNum].distance;
+            float halfAngleRad = (objArr[objNum].width / 2.0) * (M_PI / 180.0);
+            objArr[objNum].linearWidth = 2.0 * objArr[objNum].distance * tan(halfAngleRad);
+            //objArr[objNum].linearWidth = (objArr[objNum].width*(M_PI/180)) * objArr[objNum].distance;
             objArr[objNum].angleToCenter = (objArr[objNum].width / 2) + objArr[objNum].startAngle;
 
 
@@ -243,7 +245,7 @@ void scanIntermitently(int intermitentAngle, int angleDesired, cyBOT_Scan_t* sca
     sprintf(message3, "moving: %f mm\n\r", (objArr[smallestObj].distance) * 10);
     sendAStringToPuTTY(message3);
     //moveToSmallestWidth(objArr[smallestObj].angleToCenter, objArr[smallestObj].distance);
-    moveToSmallestWidth((int)(objArr[smallestObj].angleToCenter * TURNING_ANGLE), (objArr[smallestObj].distance) * 10);
+    moveToSmallestWidth((int)(objArr[smallestObj].angleToCenter), (objArr[smallestObj].distance) * 10);
 
 
 }
@@ -256,7 +258,7 @@ double move_forward_until_pressed(oi_t *sensor_data, double distance_mm){
         totalDistanceTraveled += sensor_data -> distance;
         if(sensor_data -> bumpLeft != 0 || sensor_data -> bumpRight != 0){
             go_around_object(sensor_data);
-            totalDistanceTraveled += 35.0;
+            totalDistanceTraveled += 450.0;
         }
     }
     char message4[25];
@@ -271,12 +273,20 @@ void moveToSmallestWidth(int angle, float distance){
     oi_t *sensor_data = oi_alloc();
     oi_init(sensor_data);
     float totalDistanceTraveled = 0;
+    const float TURNING_ANGLE = 0.85;
 
     int turningAngle = angle - 90;
     if(turningAngle < 0){
+        char message5[25];
+        sprintf(message5, "turning %d degrees right ", abs(turningAngle));
+        sendAStringToPuTTY(message5);
         //turn right
-        turn_right(sensor_data, abs(turningAngle));
+        turn_right(sensor_data, abs(turningAngle * TURNING_ANGLE));
     }else{
+        char message6[25];
+       sprintf(message6, "turning %d degrees left ", abs(turningAngle * TURNING_ANGLE));
+       sendAStringToPuTTY(message6);
+
         //turn left
         turn_left(sensor_data, abs(turningAngle));
 
@@ -294,26 +304,26 @@ void moveToSmallestWidth(int angle, float distance){
 
 
 void go_around_object(oi_t *sensor_data){
-    const int TURNING_ANGLE = 65;
+    const int TURNING_ANGLE = 70;
             oi_update(sensor_data);
             if (sensor_data -> bumpLeft != 0) {
                 move_backwards(sensor_data, 50);
                 turn_right(sensor_data, TURNING_ANGLE);
-                move_forward(sensor_data, 150);
+                move_forward(sensor_data, 200);
                 turn_left(sensor_data, TURNING_ANGLE);
-                move_forward(sensor_data, 450);
+                move_forward(sensor_data, 500);
                 turn_left(sensor_data, TURNING_ANGLE);
-                move_forward(sensor_data, 150);
+                move_forward(sensor_data, 200);
                 turn_right(sensor_data, TURNING_ANGLE);
             }
             else if (sensor_data -> bumpRight != 0) {
                 move_backwards(sensor_data, 50);
                 turn_left(sensor_data, TURNING_ANGLE);
-                move_forward(sensor_data, 150);
+                move_forward(sensor_data, 200);
                 turn_right(sensor_data, TURNING_ANGLE);
-                move_forward(sensor_data, 450);
+                move_forward(sensor_data, 500);
                 turn_right(sensor_data, TURNING_ANGLE);
-                move_forward(sensor_data, 150);
+                move_forward(sensor_data, 200);
                 turn_left(sensor_data, TURNING_ANGLE);
             }
             oi_update(sensor_data);
