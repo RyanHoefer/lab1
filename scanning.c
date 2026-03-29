@@ -137,7 +137,7 @@ void scanIntermitently(int intermitentAngle, int angleDesired, cyBOT_Scan_t* sca
     int firstIteration = 1;
     int trackedLastTime = 0;
     int stoppedTrackingLastTime = 0;
-    const float TURNING_ANGLE = 0.75;
+    const float TURNING_ANGLE = 1;
 
 
     typedef struct{
@@ -201,6 +201,9 @@ void scanIntermitently(int intermitentAngle, int angleDesired, cyBOT_Scan_t* sca
             objArr[objNum].distance = pingVal;
 
         } else if(((abs(previousInf - currentInf)) > differenceEpsilon) && tracking == 1 && trackedLastTime == 0){
+            if(totalAngle - objArr[objNum].startAngle < 5 ){// skip less than 4 length objects
+                continue;
+            }
             tracking = 0;
             stoppedTrackingLastTime = 1;
             objArr[objNum].endAngle = totalAngle;
