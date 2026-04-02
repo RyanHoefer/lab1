@@ -45,13 +45,13 @@ int main(void){
 
     //lcd_printf("%c",(char)cyBot_getByte());
 
-    /*
+
     char message[25];
     int totalAngle = 0;
     float scannerVal = scanner -> sound_dist;
     sprintf(message, "%d\t %f\n\r", totalAngle, scannerVal);
     sendAStringToPuTTY(message);
-    */
+
 
     //cyBOT_Scan(90, scanner);
 
@@ -116,6 +116,21 @@ void sendAStringToPuTTY(char string[]){
 
 //mostly good, a little error with edge detection but mostly good, figure oit bug with the width calulation and good to go
 void scanIntermitently(int intermitentAngle, int angleDesired, cyBOT_Scan_t* scanner){
+    const char *oldFile = "mock-cybot-sensor-scan.txt"; // old file to delete
+    if (remove(oldFile) == 0) {
+                printf("File '%s' existed and was deleted successfully.\n", oldFile);
+            } else {
+                printf("File '%s' did not exist or could not be deleted (may be fine).\n", oldFile);
+            }
+
+
+
+    FILE *file = fopen("mock-cybot-sensor-scan.txt", "w"); // create and open in write mode
+    fprintf(file, "Degrees  PING distance (cm)  distance\n");
+
+    fprintf(file, "0 \t 2.0\n");
+    fprintf(file, "2 \t 2.0\n");
+    fprintf(file, "4 \t 2.0\n");
     sendAStringToPuTTY("Degrees  PING distance (cm)  IR distance\n\r");
     char message[25];
     char message2[150];
@@ -219,6 +234,7 @@ void scanIntermitently(int intermitentAngle, int angleDesired, cyBOT_Scan_t* sca
             sprintf(message2," Distance %f,radial width %d, linear Width %f, tan function: %f\n\r", objArr[objNum].distance,objArr[objNum].width, objArr[objNum].linearWidth, tan(objArr[objNum].width)  );
             objNum++;
             sendAStringToPuTTY(message2);
+
         }else{
             stoppedTrackingLastTime = 0;
 
@@ -226,8 +242,11 @@ void scanIntermitently(int intermitentAngle, int angleDesired, cyBOT_Scan_t* sca
         }
 
         sprintf(message, "%d\t %f\t %f %d\t %d\t %d\n\r", totalAngle, pingVal, averageInfValue, previousInf, currentInf, tracking );
+        fprintf(file, "%d \t %f\n", totalAngle, (pingVal/100)); // print to the file
 
     }
+
+       fclose(file); // Close the file
     int i;
     float smallestWidth = objArr[0].linearWidth;
     float currentWidth = 0;

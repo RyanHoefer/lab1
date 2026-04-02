@@ -9,9 +9,11 @@ CMD_SRCS += \
 ../tm4c123gh6pm.cmd 
 
 LIB_SRCS += \
-../libcybotScan.lib 
+../libcybotScan.lib \
+../libcybotUART.lib 
 
 C_SRCS += \
+../Simple-CyBot-echo.c \
 ../Timer.c \
 ../button.c \
 ../helloworld.c \
@@ -28,6 +30,7 @@ C_SRCS += \
 ../uart.c 
 
 C_DEPS += \
+./Simple-CyBot-echo.d \
 ./Timer.d \
 ./button.d \
 ./helloworld.d \
@@ -44,6 +47,7 @@ C_DEPS += \
 ./uart.d 
 
 OBJS += \
+./Simple-CyBot-echo.obj \
 ./Timer.obj \
 ./button.obj \
 ./helloworld.obj \
@@ -60,6 +64,7 @@ OBJS += \
 ./uart.obj 
 
 OBJS__QUOTED += \
+"Simple-CyBot-echo.obj" \
 "Timer.obj" \
 "button.obj" \
 "helloworld.obj" \
@@ -76,6 +81,7 @@ OBJS__QUOTED += \
 "uart.obj" 
 
 C_DEPS__QUOTED += \
+"Simple-CyBot-echo.d" \
 "Timer.d" \
 "button.d" \
 "helloworld.d" \
@@ -92,6 +98,7 @@ C_DEPS__QUOTED += \
 "uart.d" 
 
 C_SRCS__QUOTED += \
+"../Simple-CyBot-echo.c" \
 "../Timer.c" \
 "../button.c" \
 "../helloworld.c" \
