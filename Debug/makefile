@@ -11,15 +11,18 @@ GEN_CMDS__FLAG :=
 
 ORDERED_OBJS += \
 "./Timer.obj" \
+"./adc.obj" \
 "./button.obj" \
 "./helloworld.obj" \
 "./lab4_template.obj" \
 "./lab5_template.obj" \
 "./lab6-interrupt_template.obj" \
 "./lab6_template.obj" \
+"./lab9_template.obj" \
 "./lcd.obj" \
 "./movement.obj" \
 "./open_interface.obj" \
+"./ping.obj" \
 "./scanning.obj" \
 "./tm4c123gh6pm_startup_ccs.obj" \
 "./uart-interrupt.obj" \
@@ -156,8 +159,8 @@ Lab2.out: $(OBJS) $(CMD_SRCS) $(LIB_SRCS) $(GEN_CMDS)
 # Other Targets
 clean:
 	-$(RM) $(EXE_OUTPUTS__QUOTED)
-	-$(RM) "Timer.obj" "button.obj" "helloworld.obj" "lab4_template.obj" "lab5_template.obj" "lab6-interrupt_template.obj" "lab6_template.obj" "lcd.obj" "movement.obj" "open_interface.obj" "scanning.obj" "tm4c123gh6pm_startup_ccs.obj" "uart-interrupt.obj" "uart.obj" 
-	-$(RM) "Timer.d" "button.d" "helloworld.d" "lab4_template.d" "lab5_template.d" "lab6-interrupt_template.d" "lab6_template.d" "lcd.d" "movement.d" "open_interface.d" "scanning.d" "tm4c123gh6pm_startup_ccs.d" "uart-interrupt.d" "uart.d" 
+	-$(RM) "Timer.obj" "adc.obj" "button.obj" "helloworld.obj" "lab4_template.obj" "lab5_template.obj" "lab6-interrupt_template.obj" "lab6_template.obj" "lab9_template.obj" "lcd.obj" "movement.obj" "open_interface.obj" "ping.obj" "scanning.obj" "tm4c123gh6pm_startup_ccs.obj" "uart-interrupt.obj" "uart.obj" 
+	-$(RM) "Timer.d" "adc.d" "button.d" "helloworld.d" "lab4_template.d" "lab5_template.d" "lab6-interrupt_template.d" "lab6_template.d" "lab9_template.d" "lcd.d" "movement.d" "open_interface.d" "ping.d" "scanning.d" "tm4c123gh6pm_startup_ccs.d" "uart-interrupt.d" "uart.d" 
 	-@echo 'Finished clean'
 	-@echo ' '
 

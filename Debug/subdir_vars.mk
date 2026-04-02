@@ -13,15 +13,18 @@ LIB_SRCS += \
 
 C_SRCS += \
 ../Timer.c \
+../adc.c \
 ../button.c \
 ../helloworld.c \
 ../lab4_template.c \
 ../lab5_template.c \
 ../lab6-interrupt_template.c \
 ../lab6_template.c \
+../lab9_template.c \
 ../lcd.c \
 ../movement.c \
 ../open_interface.c \
+../ping.c \
 ../scanning.c \
 ../tm4c123gh6pm_startup_ccs.c \
 ../uart-interrupt.c \
@@ -29,15 +32,18 @@ C_SRCS += \
 
 C_DEPS += \
 ./Timer.d \
+./adc.d \
 ./button.d \
 ./helloworld.d \
 ./lab4_template.d \
 ./lab5_template.d \
 ./lab6-interrupt_template.d \
 ./lab6_template.d \
+./lab9_template.d \
 ./lcd.d \
 ./movement.d \
 ./open_interface.d \
+./ping.d \
 ./scanning.d \
 ./tm4c123gh6pm_startup_ccs.d \
 ./uart-interrupt.d \
@@ -45,15 +51,18 @@ C_DEPS += \
 
 OBJS += \
 ./Timer.obj \
+./adc.obj \
 ./button.obj \
 ./helloworld.obj \
 ./lab4_template.obj \
 ./lab5_template.obj \
 ./lab6-interrupt_template.obj \
 ./lab6_template.obj \
+./lab9_template.obj \
 ./lcd.obj \
 ./movement.obj \
 ./open_interface.obj \
+./ping.obj \
 ./scanning.obj \
 ./tm4c123gh6pm_startup_ccs.obj \
 ./uart-interrupt.obj \
@@ -61,15 +70,18 @@ OBJS += \
 
 OBJS__QUOTED += \
 "Timer.obj" \
+"adc.obj" \
 "button.obj" \
 "helloworld.obj" \
 "lab4_template.obj" \
 "lab5_template.obj" \
 "lab6-interrupt_template.obj" \
 "lab6_template.obj" \
+"lab9_template.obj" \
 "lcd.obj" \
 "movement.obj" \
 "open_interface.obj" \
+"ping.obj" \
 "scanning.obj" \
 "tm4c123gh6pm_startup_ccs.obj" \
 "uart-interrupt.obj" \
@@ -77,15 +89,18 @@ OBJS__QUOTED += \
 
 C_DEPS__QUOTED += \
 "Timer.d" \
+"adc.d" \
 "button.d" \
 "helloworld.d" \
 "lab4_template.d" \
 "lab5_template.d" \
 "lab6-interrupt_template.d" \
 "lab6_template.d" \
+"lab9_template.d" \
 "lcd.d" \
 "movement.d" \
 "open_interface.d" \
+"ping.d" \
 "scanning.d" \
 "tm4c123gh6pm_startup_ccs.d" \
 "uart-interrupt.d" \
@@ -93,15 +108,18 @@ C_DEPS__QUOTED += \
 
 C_SRCS__QUOTED += \
 "../Timer.c" \
+"../adc.c" \
 "../button.c" \
 "../helloworld.c" \
 "../lab4_template.c" \
 "../lab5_template.c" \
 "../lab6-interrupt_template.c" \
 "../lab6_template.c" \
+"../lab9_template.c" \
 "../lcd.c" \
 "../movement.c" \
 "../open_interface.c" \
+"../ping.c" \
 "../scanning.c" \
 "../tm4c123gh6pm_startup_ccs.c" \
 "../uart-interrupt.c" \
