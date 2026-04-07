@@ -14,6 +14,8 @@
 
 #include "ping.h"
 #include "Timer.h"
+#include "lcd.h"
+
 
 // Global shared variables
 // Use extern declarations in the header file
@@ -22,6 +24,8 @@ volatile uint32_t g_start_time = 0;
 volatile uint32_t g_end_time = 0;
 volatile int triggered = 0;
 volatile enum{LOW, HIGH, DONE} g_state = LOW; // State of ping echo pulse
+int overflow = 0;
+
 
 void ping_init (void){
     SYSCTL_RCGCGPIO_R |= 0x02;
@@ -49,13 +53,6 @@ void ping_init (void){
     TIMER3_IMR_R |= 0x400;// set apture mode interrupt thing here
     NVIC_PRI9_R |= 0x10;
     NVIC_PRI9_R &= ~0x60;
-
-
-
-
-
-
-
 
 
     // Configure and enable the timer
@@ -95,6 +92,8 @@ void ping_trigger (void){
 
 void TIMER3B_Handler(void){
 
+
+
   // YOUR CODE HERE
   // As needed, go back to review your interrupt handler code for the UART lab.
   // What are the first lines of code in the ISR? Regardless of the device, interrupt handling
@@ -116,13 +115,25 @@ void TIMER3B_Handler(void){
                 triggered = 1;
             }else{
                 g_end_time = TIMER3_TBR_R;
+                triggered = 0;
+                //int time = timer_getMicros();
+                if ((g_start_time - g_end_time) > 288000){
+                    overflow++;
+                }
+                lcd_printf("%d,%d,%d,%d", (g_start_time - g_end_time), g_end_time,g_start_time,overflow);
             }
+
+
+
+
 
         }
 
 }
 
 float ping_getDistance (void){
+
+
 
 
     return 0.0;
