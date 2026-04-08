@@ -120,7 +120,7 @@ void TIMER3B_Handler(void){
                 if ((g_start_time - g_end_time) > 288000){
                     overflow++;
                 }
-                lcd_printf("%d,%d,%d,%d", (g_start_time - g_end_time), g_end_time,g_start_time,overflow);
+                lcd_printf("Clk Cyc %d\nS-Time %d\nE-Time %d\nOF%d", (g_start_time - g_end_time), g_end_time,g_start_time,overflow);
             }
 
 
