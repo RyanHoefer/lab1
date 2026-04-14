@@ -23,6 +23,7 @@ C_SRCS += \
 ../open_interface.c \
 ../ping.c \
 ../scanning.c \
+../servo.c \
 ../tm4c123gh6pm_startup_ccs.c \
 ../uart-interrupt.c \
 ../uart.c 
@@ -42,6 +43,7 @@ C_DEPS += \
 ./open_interface.d \
 ./ping.d \
 ./scanning.d \
+./servo.d \
 ./tm4c123gh6pm_startup_ccs.d \
 ./uart-interrupt.d \
 ./uart.d 
@@ -61,6 +63,7 @@ OBJS += \
 ./open_interface.obj \
 ./ping.obj \
 ./scanning.obj \
+./servo.obj \
 ./tm4c123gh6pm_startup_ccs.obj \
 ./uart-interrupt.obj \
 ./uart.obj 
@@ -80,6 +83,7 @@ OBJS__QUOTED += \
 "open_interface.obj" \
 "ping.obj" \
 "scanning.obj" \
+"servo.obj" \
 "tm4c123gh6pm_startup_ccs.obj" \
 "uart-interrupt.obj" \
 "uart.obj" 
@@ -99,6 +103,7 @@ C_DEPS__QUOTED += \
 "open_interface.d" \
 "ping.d" \
 "scanning.d" \
+"servo.d" \
 "tm4c123gh6pm_startup_ccs.d" \
 "uart-interrupt.d" \
 "uart.d" 
@@ -118,6 +123,7 @@ C_SRCS__QUOTED += \
 "../open_interface.c" \
 "../ping.c" \
 "../scanning.c" \
+"../servo.c" \
 "../tm4c123gh6pm_startup_ccs.c" \
 "../uart-interrupt.c" \
 "../uart.c" 
